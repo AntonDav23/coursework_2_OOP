@@ -10,6 +10,16 @@ class Aeroplane:
         velocity: float | None,
         true_track: float | None,
     ) -> None:
+        if not icao24 or not origin_country:
+            raise ValueError("Не указаны обязательные данные самолета")
+        # if baro_altitude is not None and baro_altitude < 0:
+        #    raise ValueError("Высота не может быть отрицательной")
+        if velocity is not None and velocity < 0:
+            raise ValueError("Скорость не может быть отрицательной")
+        if latitude is not None and not -90 <= latitude <= 90:
+            raise ValueError("Некорректная широта")
+        if longitude is not None and not -180 <= longitude <= 180:
+            raise ValueError("Некорректная долгота")
         self.icao24 = icao24
         self.callsign = callsign
         self.origin_country = origin_country

@@ -18,15 +18,24 @@ class NominatimAPI(BaseAPI):
         }
 
     def get_data(self) -> Any:
-        response = requests.get(
-            self.url,
-            params=self.params,
-            headers=self.headers,
-            timeout=10,
-        )
-        response.raise_for_status()
+        try:
+            response = requests.get(
+                self.url,
+                params=self.params,
+                headers=self.headers,
+                timeout=10,
+            )
+            response.raise_for_status()
+        except requests.exceptions.RequestException as error:
+            raise ConnectionError("Ошибка подключения к Nominatim API") from error
+
         data = response.json()
-        boundingbox = data[0]["boundingbox"]
+        if not data:
+            raise ValueError("Страна не найдена")
+        try:
+            boundingbox = data[0]["boundingbox"]
+        except IndexError, KeyError, TypeError:
+            raise ValueError("Некорректный ответ Nominatim API")
         return boundingbox
 
 
@@ -45,11 +54,16 @@ class OpenSkyAPI(BaseAPI):
         }
 
     def get_data(self) -> Any:
-        response = requests.get(
-            self.url,
-            params=self.params,
-            timeout=10,
-        )
-        response.raise_for_status()
+        try:
+            response = requests.get(
+                self.url,
+                params=self.params,
+                timeout=10,
+            )
+            response.raise_for_status()
+        except requests.exceptions.RequestException as error:
+            raise ConnectionError("Ошибка подключения к OpenSky API") from error
         data = response.json()
+        if not isinstance(data, dict) or "states" not in data:
+            raise ValueError("Некорректный ответ OpenSky API")
         return data

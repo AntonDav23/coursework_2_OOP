@@ -1,3 +1,5 @@
+import pytest
+
 from src.aeroplane import Aeroplane
 
 
@@ -58,3 +60,33 @@ def test_compare_when_values_are_none():
     assert not (plane1 < plane2)
     assert not (plane1 >= plane2)
     assert not (plane1 <= plane2)
+
+
+def test_invalid_icao24():
+    """Проверяет ошибку при отсутствии идентификатора самолета."""
+    with pytest.raises(ValueError):
+        Aeroplane("", "AFL123", "Russia", 37.6, 55.7, 10000.0, 250.0, 180.0)
+
+
+def test_negative_velocity():
+    """ПРоверяет ошибку при отрицательной скорости самолета."""
+    with pytest.raises(ValueError):
+        Aeroplane("abc123", "AFL123", "Russia", 37.6, 55.7, 10000.0, -250.0, 180.0)
+
+
+# def test_negative_altitude():
+#    """Проверяет ошибку при отрицательной высоте самолета."""
+#    with pytest.raises(ValueError):
+#        Aeroplane("abc123", "AFL123", "Russia", 37.6, 55.7, -10000.0, 250.0, 180.0)
+
+
+def test_negative_latitude():
+    """Проверяет ошибку при недопустимой широте."""
+    with pytest.raises(ValueError):
+        Aeroplane("abc123", "AFL123", "Russia", 37.6, 95.0, 10000.0, 250.0, 180.0)
+
+
+def test_negative_longitude():
+    """Проверяет ошибку при недопустимой широте."""
+    with pytest.raises(ValueError):
+        Aeroplane("abc123", "AFL123", "Russia", 200.0, 55.7, 10000.0, 250.0, 180.0)
