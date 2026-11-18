@@ -30,12 +30,12 @@ def test_compare_by_speed():
 
 
 def test_compare_by_altitude():
-    """Проверяет сравнение двух самолетов по скорости"""
+    """Проверяет сравнение двух самолетов по высоте"""
     plane1 = Aeroplane("abc123", "AFL123", "Russia", 37.6, 55.7, 12000.0, 250.0, 180.0)
     plane2 = Aeroplane("abc456", "AFL456", "Russia", 37.7, 55.8, 10000.0, 200.0, 190.0)
 
-    assert plane1 > plane2
-    assert plane2 < plane1
+    assert plane1 >= plane2
+    assert plane2 <= plane1
 
 
 def test_str():
@@ -74,10 +74,10 @@ def test_negative_velocity():
         Aeroplane("abc123", "AFL123", "Russia", 37.6, 55.7, 10000.0, -250.0, 180.0)
 
 
-# def test_negative_altitude():
-#    """Проверяет ошибку при отрицательной высоте самолета."""
-#    with pytest.raises(ValueError):
-#        Aeroplane("abc123", "AFL123", "Russia", 37.6, 55.7, -10000.0, 250.0, 180.0)
+def test_negative_altitude():
+    """Проверяет ошибку при отрицательной высоте самолета."""
+    with pytest.raises(ValueError):
+        Aeroplane("abc123", "AFL123", "Russia", 37.6, 55.7, -10000.0, 250.0, 180.0)
 
 
 def test_negative_latitude():

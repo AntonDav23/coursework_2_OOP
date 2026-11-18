@@ -7,16 +7,19 @@ def convert_to_aircraft(data: list[list]) -> list[Aeroplane]:
     for aircraft_data in data:
         if not aircraft_data:
             continue
-        aircraft = Aeroplane(
-            icao24=aircraft_data[0],
-            callsign=aircraft_data[1],
-            origin_country=aircraft_data[2],
-            longitude=aircraft_data[5],
-            latitude=aircraft_data[6],
-            baro_altitude=aircraft_data[7],
-            velocity=aircraft_data[9],
-            true_track=aircraft_data[10],
-        )
+        try:
+            aircraft = Aeroplane(
+                icao24=aircraft_data[0],
+                callsign=aircraft_data[1],
+                origin_country=aircraft_data[2],
+                longitude=aircraft_data[5],
+                latitude=aircraft_data[6],
+                baro_altitude=aircraft_data[7],
+                velocity=aircraft_data[9],
+                true_track=aircraft_data[10],
+            )
+        except ValueError:
+            continue
         aircraft_list.append(aircraft)
     return aircraft_list
 

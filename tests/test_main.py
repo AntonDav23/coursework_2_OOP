@@ -13,7 +13,7 @@ def test_main_empty_country():
 
 def test_main_connection_error():
     """Проверяет обработку ошибки подключения."""
-    with patch("builtins.input", return_value="Russia"):
+    with patch("builtins.input", side_effect=["Russia", "5"]):
         with patch("main.NominatimAPI") as mock_api:
             mock_api.return_value.get_data.side_effect = ConnectionError("Ошибка подкючения к Nominatim API")
 
@@ -24,7 +24,7 @@ def test_main_connection_error():
 
 def test_main_country_not_found():
     """Проверяет обработку ситуации, когда страна не найдена."""
-    with patch("builtins.input", return_value="UnknownCountry"):
+    with patch("builtins.input", side_effect=["UnknownCountry", "5"]):
         with patch("main.NominatimAPI") as mock_api:
             mock_api.return_value.get_data.side_effect = ValueError("Страна не найдена")
 
@@ -36,7 +36,7 @@ def test_main_country_not_found():
 
 def test_main_success():
     """Проверяет успешное выполнение main()."""
-    with patch("builtins.input", return_value="Russia"):
+    with patch("builtins.input", side_effect=["Russia", "5", "Russia"]):
         with patch("main.NominatimAPI") as mock_nominatim:
             mock_nominatim.return_value.get_data.return_value = ["1", "2"]
 
@@ -47,4 +47,4 @@ def test_main_success():
                     with patch("builtins.print") as mock_print:
                         main()
 
-    assert mock_print.call_count == 2
+    assert mock_print.call_count == 5
